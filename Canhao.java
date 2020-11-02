@@ -7,9 +7,15 @@ import javafx.scene.paint.Paint;
  * @author Bernardo Copstein, Rafael Copstein
  */
 public class Canhao extends BasicElement implements KeyboardCtrl{
+    private boolean pressingLeft = false;
+    private boolean pressingRight = false;
+    private boolean firing = false;
+    private int fireDelay = 100;
+    private long lastFiredTime = System.currentTimeMillis();
+
     public Canhao(int px,int py){
         super(px,py);
-    }    
+    }
     
     @Override
     public void start() {
@@ -19,21 +25,26 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
     
     @Override
     public void Update() {
-        setPosX(getX() + getDirH() * getSpeed());        
+        if (pressingLeft) setPosX(getX() + -getSpeed());
+        if (pressingRight) setPosX(getX() + getSpeed());
+        if (firing && System.currentTimeMillis() - lastFiredTime > fireDelay) {
+            Game.getInstance().addChar(new Shot(getX() + 16, getY() - 32, -1, 0, 15));
+            lastFiredTime = System.currentTimeMillis();
+        }
     }
     
     @Override
     public void OnInput(KeyCode keyCode, boolean isPressed) {
-        if (keyCode == KeyCode.LEFT){
-            int dh = isPressed ? -1 : 0;
-            setDirH(dh);
-        }
-        if (keyCode == KeyCode.RIGHT){
-            int dh = isPressed ? 1 : 0;
-            setDirH(dh);
-        }
-        if (keyCode == KeyCode.SPACE){
-            Game.getInstance().addChar(new Shot(getX()+16,getY()-32));
+        switch (keyCode) {
+            case LEFT:
+                pressingLeft = isPressed;
+                break;
+            case RIGHT:
+                pressingRight = isPressed;
+                break;
+            case SPACE:
+                firing = isPressed;
+                break;
         }
         //if (keyCode == KeyCode.UP) do nothing
         //if (keyCode == KeyCode.DOWN) do nothing
