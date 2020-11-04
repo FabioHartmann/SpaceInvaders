@@ -19,6 +19,7 @@ public class Ball extends BasicElement{
     @Override
     public void Update(){
         if (jaColidiu()){
+            Game.getInstance().onEnemyKilled();
             deactivate();
         }else{
             setPosX(getX() + getDirH() * getSpeed());
@@ -30,7 +31,7 @@ public class Ball extends BasicElement{
                 setSpeed(Params.getInstance().nextInt(5)+1);
             }
         }
-    }    
+    }
     
     public void Draw(GraphicsContext graphicsContext){
         graphicsContext.setFill(Paint.valueOf("#0000FF"));

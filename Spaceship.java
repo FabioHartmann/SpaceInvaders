@@ -15,7 +15,7 @@ public class Spaceship extends Ball {
         }else{
             setPosX(getX() + getDirH() * getSpeed());
             if (System.currentTimeMillis() - lastFiredTime > fireDelay) {
-                Game.getInstance().addChar(new Shot(getX()-16, getY()+30, 1, 1, 1));
+                Game.getInstance().addChar(new Shot(getX()-16, getY()+getAltura(), 1, 1, 1));
                 lastFiredTime = System.currentTimeMillis();
             }
             if (getX() >= getLMaxH()){

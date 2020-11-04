@@ -14,8 +14,13 @@ public abstract class BasicElement implements Character{
     private int speed;
     private boolean active;
     private boolean colidiu;
+    private boolean colidindo;
     private int direction_horizontal, direction_vertical;
-    
+
+    public BasicElement() {
+        this(0, 0);
+    }
+
     public BasicElement(int startX,int startY){
         posX = startX;
         posY = startY;
@@ -26,10 +31,10 @@ public abstract class BasicElement implements Character{
         active = true;
         colidiu = false;
         speed = 2;
-        lminH = (int)(Params.WINDOW_WIDTH * 0.1);
-        lmaxH = (int)(Params.WINDOW_WIDTH * 0.9);
-        lminV = (int)(Params.WINDOW_HEIGHT * 0.1);
-        lmaxV = (int)(Params.WINDOW_HEIGHT * 0.8);
+        lminH = 0;
+        lmaxH = Params.GAME_WIDTH;
+        lminV = 0;
+        lmaxV = Params.GAME_HEIGHT;
     }
     
     @Override
@@ -54,9 +59,6 @@ public abstract class BasicElement implements Character{
 
     @Override
     public void testaColisao(Character outro){
-        if (colidiu){
-            return;
-        }
         // Monta pontos
         int p1x = this.getX();
         int p1y = this.getY();
@@ -67,13 +69,19 @@ public abstract class BasicElement implements Character{
         int op1y = outro.getY();
         int op2x = op1x+outro.getLargura();
         int op2y = op1y+outro.getAltura();
-        
+
         // Verifica colisão
+        if (p1x < op2x && p2x > op1x && p1y < op2y && p2y > op1y){
+            colidindo = true;
+            colidiu = true;
+            //outro.setColidiu();
+        }
+        /*// Verifica colisão
         if ( ((p1x <= op1x && p2x >= op1x) && (p1y <= op1y && p2y >= op1y)) ||
              ((p1x <= op2x && p2x >= op2x) && (p1y <= op2y && p2y >= op2y)) ){
             colidiu = true;
             //outro.setColidiu();
-        }
+        }*/
     }
     
     public int getDirH(){
@@ -143,7 +151,17 @@ public abstract class BasicElement implements Character{
         active = false;
         Game.getInstance().eliminate(this);
     }
-    
+
+    @Override
+    public void resetColidindo() {
+        colidindo = false;
+    }
+
+    @Override
+    public boolean isColidindo() {
+        return colidindo;
+    }
+
     @Override
     public boolean jaColidiu(){
         return(colidiu);

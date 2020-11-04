@@ -13,15 +13,18 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
     private int lives = 3;
     private int fireDelay = 100;
     private long lastFiredTime = System.currentTimeMillis();
-
-    public Canhao(int px,int py){
-        super(px,py);
-    }
     
     @Override
     public void start() {
-        setLimH(20,Params.WINDOW_WIDTH-20);
-        setLimV(Params.WINDOW_HEIGHT-100,Params.WINDOW_HEIGHT);
+        setLargAlt(32, 48);
+        setSpeed(10);
+        setPosY(Params.GAME_HEIGHT-getAltura());
+        setLimV(Params.GAME_HEIGHT-getAltura(),Params.GAME_HEIGHT);
+    }
+
+    private void move(int xDelta, int yDelta) {
+        setPosX(Math.min(Math.max(getLMinH(), getX() + xDelta), getLMaxH() - getLargura()));
+        setPosY(Math.min(Math.max(getLMinV(), getY() + yDelta), getLMaxV() - getAltura()));
     }
 
     public void setLives(int lives) {
@@ -34,9 +37,13 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
 
     @Override
     public void Update() {
-        if(jaColidiu()) setLives(lives-1);
-        if (pressingLeft) setPosX(getX() + -getSpeed());
-        if (pressingRight) setPosX(getX() + getSpeed());
+        if(isColidindo()) {
+            setLives(lives-1);
+            Game.getInstance().onPlayerDamage();
+        }
+        if (pressingLeft) move(-getSpeed(), 0);
+        if (pressingRight) move(getSpeed(), 0);
+
         if (firing && System.currentTimeMillis() - lastFiredTime > fireDelay) {
             Game.getInstance().addChar(new Shot(getX() + 16, getY() - 32, -1, 0, 15));
             lastFiredTime = System.currentTimeMillis();
@@ -64,6 +71,6 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
     public void Draw(GraphicsContext graphicsContext) {
         graphicsContext.setFill(Paint.valueOf("#FF0000"));
         graphicsContext.fillRect(getX(), getY()+16, 32, 32);
-        graphicsContext.fillRect(getX()+8, getY()-16, 16, 48);        
+        graphicsContext.fillRect(getX()+8, getY(), 16, 16);
     }   
 }

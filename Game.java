@@ -13,8 +13,10 @@ public class Game {
     private static Game game = null;
     private Canhao canhao;
     private List<Character> activeChars;
+    private int score = 0;
     
-    private Game(){
+    private Game() {
+
     }
     
     public static Game getInstance(){
@@ -31,14 +33,23 @@ public class Game {
     
     public void eliminate(Character c){
         activeChars.remove(c);
-    }   
+    }
+
+    public void onEnemyKilled() {
+        score++;
+        UIManager.getInstance().setScore(score);
+    }
+
+    public void onPlayerDamage() {
+        UIManager.getInstance().setLifes(canhao.getLives());
+    }
 
     public void Start() {
         // Repositório de personagens
         activeChars = new LinkedList();
         
         // Adiciona o canhao
-        canhao = new Canhao(400,550);
+        canhao = new Canhao();
         activeChars.add(canhao);
         
         for(int i=0; i<5; i++){
@@ -58,15 +69,24 @@ public class Game {
             System.out.println("Faleceu");
             //printar na tela o game over
         }
+
+        for(int i=0;i<activeChars.size();i++) {
+            Character este = activeChars.get(i);
+            este.resetColidindo();
+        }
         for(int i=0;i<activeChars.size();i++){
             Character este = activeChars.get(i);
-            este.Update();
             for(int j =0; j<activeChars.size();j++){
                 Character outro = activeChars.get(j);
                 if ( este != outro){
                     este.testaColisao(outro);
                 }
             }
+        }
+
+        for(int i=0;i<activeChars.size();i++){
+            Character este = activeChars.get(i);
+            este.Update();
         }
     }
     
@@ -76,7 +96,7 @@ public class Game {
     
     public void Draw(GraphicsContext graphicsContext) {
         graphicsContext.setFill(Paint.valueOf("000000"));
-        graphicsContext.fillRect(0, 0, Params.WINDOW_WIDTH, Params.WINDOW_HEIGHT);
+        graphicsContext.fillRect(0, 0, Params.GAME_WIDTH, Params.GAME_HEIGHT);
         for(Character c:activeChars){
             c.Draw(graphicsContext);
         }

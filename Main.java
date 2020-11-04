@@ -17,13 +17,19 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         // Initialize Window
         stage.setTitle(Params.WINDOW_TITLE);
+        stage.setResizable(false);
+        stage.setWidth(Params.WINDOW_WIDTH);
+        stage.setHeight(Params.WINDOW_HEIGHT);
  
         Group root = new Group();
         Scene scene = new Scene( root );
         stage.setScene( scene );
 
-        Canvas canvas = new Canvas(Params.WINDOW_WIDTH, Params.WINDOW_HEIGHT );
-        root.getChildren().add( canvas );
+        Canvas canvas = new Canvas(Params.GAME_WIDTH, Params.GAME_HEIGHT);
+
+        UIManager uiManager = UIManager.getInstance();
+        uiManager.setCanvas(canvas);
+        uiManager.setRoot(root);
 
         // Setup Game object
         Game.getInstance().Start();
@@ -50,7 +56,7 @@ public class Main extends Application {
                 long deltaTime = currentNanoTime - lastNanoTime;
                 
                 Game.getInstance().Update(currentNanoTime, deltaTime);
-                gc.clearRect(0, 0, Params.WINDOW_WIDTH, Params.WINDOW_HEIGHT);
+                gc.clearRect(0, 0, Params.GAME_WIDTH, Params.GAME_HEIGHT);
                 Game.getInstance().Draw(gc);
                 
                 lastNanoTime = currentNanoTime;

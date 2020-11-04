@@ -13,6 +13,8 @@ public interface Character {
     int getLargura();
     
     void testaColisao(Character c);
+    void resetColidindo();
+    boolean isColidindo();
     boolean jaColidiu();
     void setColidiu();
     
