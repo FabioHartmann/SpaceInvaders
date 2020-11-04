@@ -42,7 +42,10 @@ public class Game {
         activeChars.add(canhao);
         
         for(int i=0; i<5; i++){
-            activeChars.add(new Ball(100+(i*60),60+i*40));
+            activeChars.add(new Ball(100+(i*10),60+i*35));
+        }
+        for(int i=5; i<10; i++){
+            activeChars.add(new Spaceship(100+(i*30),60+i*40));
         }
         
         for(Character c:activeChars){
@@ -51,6 +54,10 @@ public class Game {
     }
     
     public void Update(long currentTime, long deltaTime) {
+        if(canhao.getLives() == 0) {
+            System.out.println("Faleceu");
+            //printar na tela o game over
+        }
         for(int i=0;i<activeChars.size();i++){
             Character este = activeChars.get(i);
             este.Update();
