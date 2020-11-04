@@ -10,6 +10,7 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
     private boolean pressingLeft = false;
     private boolean pressingRight = false;
     private boolean firing = false;
+    private int lives = 3;
     private int fireDelay = 100;
     private long lastFiredTime = System.currentTimeMillis();
 
@@ -22,9 +23,18 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
         setLimH(20,Params.WINDOW_WIDTH-20);
         setLimV(Params.WINDOW_HEIGHT-100,Params.WINDOW_HEIGHT);
     }
-    
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
     @Override
     public void Update() {
+        if(jaColidiu()) setLives(lives-1);
         if (pressingLeft) setPosX(getX() + -getSpeed());
         if (pressingRight) setPosX(getX() + getSpeed());
         if (firing && System.currentTimeMillis() - lastFiredTime > fireDelay) {
