@@ -14,6 +14,8 @@ public class Game {
     private Canhao canhao;
     private List<Character> activeChars;
     private int score = 0;
+    private boolean died = false;
+    private long lastTimeDied = 0;
     
     private Game() {
 
@@ -37,37 +39,62 @@ public class Game {
 
     public void onEnemyKilled() {
         score++;
-        UIManager.getInstance().setScore(score);
+        UIManager.getInstance().update();
     }
 
     public void onPlayerDamage() {
-        UIManager.getInstance().setLifes(canhao.getLives());
+        UIManager.getInstance().update();
+        if (canhao.getLives() == 0) {
+            died = true;
+            lastTimeDied = System.currentTimeMillis();
+        }
     }
 
     public void Start() {
         // Repositório de personagens
         activeChars = new LinkedList();
         
+        resetGame();
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getLifes() {
+        if (canhao == null) return 0;
+        return canhao.getLives();
+    }
+
+    private void resetGame() {
+        activeChars.clear();
+        score = 0;
+
+        died = false;
+
         // Adiciona o canhao
         canhao = new Canhao();
-        activeChars.add(canhao);
-        
+        addChar(canhao);
+
         for(int i=0; i<5; i++){
-            activeChars.add(new Ball(100+(i*10),60+i*35));
+            addChar(new Ball(100+(i*10),60+i*35));
         }
         for(int i=5; i<10; i++){
-            activeChars.add(new Spaceship(100+(i*30),60+i*40));
+            addChar(new Spaceship(100+(i*30),60+i*40));
         }
-        
-        for(Character c:activeChars){
-            c.start();
-        }
+
+        UIManager.getInstance().update();
     }
     
     public void Update(long currentTime, long deltaTime) {
-        if(canhao.getLives() == 0) {
-            System.out.println("Faleceu");
-            //printar na tela o game over
+        if(died) {
+            if (System.currentTimeMillis() - lastTimeDied > 3000) {
+                resetGame();
+                UIManager.getInstance().setGameOverVisible(false);
+            } else {
+                UIManager.getInstance().setGameOverVisible(true);
+                canhao.deactivate();
+            }
         }
 
         for(int i=0;i<activeChars.size();i++) {
