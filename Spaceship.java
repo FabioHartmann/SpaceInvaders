@@ -15,7 +15,7 @@ public class Spaceship extends Ball {
         }else{
             setPosX(getX() + getDirH() * getSpeed());
             if (System.currentTimeMillis() - lastFiredTime > fireDelay) {
-                Game.getInstance().addChar(new Shot(getX()-16, getY()+getAltura(), 1, 1, 1));
+                Game.getInstance().addChar(new Shot(getX()-16, getY()+getAltura(), 1, 0, 5));
                 lastFiredTime = System.currentTimeMillis();
             }
             if (getX() >= getLMaxH()){
@@ -27,8 +27,7 @@ public class Spaceship extends Ball {
     }
 
     public void Draw(GraphicsContext graphicsContext){
-        graphicsContext.setFill(Paint.valueOf("#FFFFFF"));
-        graphicsContext.fillOval(getX(), getY(), 32, 32);
+        graphicsContext.drawImage(AssetsManager.getInstance().getImage("spaceship.gif"), getX(), getY(), getLargura(), getAltura());
     }
 
 

@@ -51,6 +51,9 @@ public class Game {
     }
 
     public void Start() {
+        AssetsManager.getInstance();
+        AudioManager.getInstance().setupPlayersOfAll(AssetsManager.getInstance().getSounds(), 5);
+
         // Repositório de personagens
         activeChars = new LinkedList();
         

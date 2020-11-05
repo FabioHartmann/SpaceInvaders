@@ -16,8 +16,8 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
     
     @Override
     public void start() {
-        setLargAlt(32, 48);
-        setSpeed(10);
+        setLargAlt(32, 32);
+        setSpeed(4);
         setPosY(Params.GAME_HEIGHT-getAltura());
         setLimV(Params.GAME_HEIGHT-getAltura(),Params.GAME_HEIGHT);
     }
@@ -46,6 +46,7 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
 
         if (firing && System.currentTimeMillis() - lastFiredTime > fireDelay) {
             Game.getInstance().addChar(new Shot(getX() + 16, getY() - 32, -1, 0, 15));
+            AudioManager.getInstance().play(AssetsManager.getInstance().getSound("shoot1.mp3"));
             lastFiredTime = System.currentTimeMillis();
         }
     }
@@ -69,8 +70,6 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
     
     @Override
     public void Draw(GraphicsContext graphicsContext) {
-        graphicsContext.setFill(Paint.valueOf("#FF0000"));
-        graphicsContext.fillRect(getX(), getY()+16, 32, 32);
-        graphicsContext.fillRect(getX()+8, getY(), 16, 16);
+        graphicsContext.drawImage(AssetsManager.getInstance().getImage("player.png"), getX(), getY(), getLargura(), getAltura());
     }   
 }

@@ -13,6 +13,7 @@ public class Shot extends BasicElement{
         setDirV(dirV);
         setDirH(dirH);
         setSpeed(speed);
+        setLargAlt(3, 10);
     }
     
     @Override
@@ -44,7 +45,7 @@ public class Shot extends BasicElement{
 
     public void Draw(GraphicsContext graphicsContext){
         graphicsContext.setFill(Paint.valueOf("#00FF00"));
-        graphicsContext.fillOval(getX(), getY(), 8, 16);
+        graphicsContext.fillRect(getX(), getY(), getLargura(), getAltura());
     }    
 }
 
