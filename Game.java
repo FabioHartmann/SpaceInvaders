@@ -4,6 +4,7 @@ import javafx.scene.paint.Paint;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 /**
  * Handles the game lifecycle and behavior
@@ -60,6 +61,13 @@ public class Game {
         resetGame();
     }
 
+    public <T> List<T> getChars(Class<T> clazz) {
+        return activeChars.stream()
+                .filter(clazz::isInstance)
+                .map(clazz::cast)
+                .collect(Collectors.toList());
+    }
+
     public int getScore() {
         return score;
     }
@@ -79,11 +87,17 @@ public class Game {
         canhao = new Canhao();
         addChar(canhao);
 
-        for(int i=0; i<5; i++){
-            addChar(new Ball(100+(i*10),60+i*35));
+        for(int i=0; i<15; i++){
+            addChar(new Spaceship(i * 40, 40));
         }
-        for(int i=5; i<10; i++){
-            addChar(new Spaceship(100+(i*30),60+i*40));
+        for(int i=0; i < 15; i++){
+            addChar(new GroupEnemy(i * 40, 120));
+        }
+        for(int i=0; i < 15; i++){
+            addChar(new GroupEnemy(i * 40, 160));
+        }
+        for(int i=0; i < 15; i++){
+            addChar(new GroupEnemy(i * 40, 200));
         }
 
         UIManager.getInstance().update();

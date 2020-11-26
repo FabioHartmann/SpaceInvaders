@@ -19,6 +19,7 @@ public class AudioManager {
     }
 
     public void setupPlayersOfAll(Media[] medias, int count) {
+        if (medias == null) return;
         for(Media media : medias) {
             setupPlayers(media, count);
         }
@@ -33,14 +34,19 @@ public class AudioManager {
         }
 
         for(int i = 0; i < count; i++) {
-            MediaPlayer mp = new MediaPlayer(media);
-            mp.setVolume(0.2);
-            mp.setAutoPlay(false);
-            mps.push(mp);
-            mp.setOnEndOfMedia(() -> mps.push(mp));
-        }
+            try {
+                MediaPlayer mp = new MediaPlayer(media);
+                mp.setVolume(0.2);
+                mp.setAutoPlay(false);
+                mps.push(mp);
+                mp.setOnEndOfMedia(() -> mps.push(mp));
 
-        players.put(media, mps);
+                players.put(media, mps);
+            }
+            catch (Exception exc) {
+                System.out.println("Failed setup audio player");
+            }
+        }
     }
 
     public void play(Media media) {
@@ -50,7 +56,7 @@ public class AudioManager {
 
         mps = players.get(media);
 
-        if (mps.isEmpty()) return;
+        if (mps == null || mps.isEmpty()) return;
 
         MediaPlayer mp = mps.pop();
 
@@ -58,8 +64,7 @@ public class AudioManager {
             mp.seek(mp.getStartTime());
             mp.play();
         } catch (Exception exc) {
-            exc.printStackTrace();
-            System.out.println(exc.getMessage());
+            System.out.println("Failed play audio");
             mps.push(mp);
         }
     }

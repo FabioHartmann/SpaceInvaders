@@ -7,15 +7,22 @@ import javafx.scene.paint.Paint;
  * @author Bernardo Copstein and Rafael Copstein
  */
 public class Shot extends BasicElement{
-    public Shot(int px,int py, int dirV, int dirH, int speed){
+    private Character owner;
+
+    public Shot(int px,int py, int dirV, int dirH, int speed, Character owner){
         super(px,py);
 
         setDirV(dirV);
         setDirH(dirH);
         setSpeed(speed);
         setLargAlt(3, 10);
+        this.owner = owner;
     }
-    
+
+    public Character getOwner() {
+        return owner;
+    }
+
     @Override
     public void start(){ }
             
@@ -24,9 +31,9 @@ public class Shot extends BasicElement{
         // Não verifica colisão de um tiro com outro tiro
         if (outro instanceof Shot){
             return;
-        }else{
-            super.testaColisao(outro);
         }
+
+        super.testaColisao(outro);
     }
                 
     @Override
@@ -41,11 +48,12 @@ public class Shot extends BasicElement{
                 deactivate();
             }
         }
-    }    
+    }
 
+    @Override
     public void Draw(GraphicsContext graphicsContext){
         graphicsContext.setFill(Paint.valueOf("#00FF00"));
         graphicsContext.fillRect(getX(), getY(), getLargura(), getAltura());
-    }    
+    }
 }
 

@@ -14,6 +14,7 @@ public abstract class BasicElement implements Character{
     private int speed;
     private boolean active;
     private boolean colidiu;
+    private Character colidindoChar;
     private boolean colidindo;
     private int direction_horizontal, direction_vertical;
 
@@ -73,6 +74,7 @@ public abstract class BasicElement implements Character{
         // Verifica colisão
         if (p1x < op2x && p2x > op1x && p1y < op2y && p2y > op1y){
             colidindo = true;
+            colidindoChar = outro;
             colidiu = true;
             //outro.setColidiu();
         }
@@ -155,11 +157,17 @@ public abstract class BasicElement implements Character{
     @Override
     public void resetColidindo() {
         colidindo = false;
+        colidindoChar = null;
     }
 
     @Override
     public boolean isColidindo() {
         return colidindo;
+    }
+
+    @Override
+    public Character getColidindoChar() {
+        return colidindoChar;
     }
 
     @Override

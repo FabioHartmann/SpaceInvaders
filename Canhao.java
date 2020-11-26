@@ -1,4 +1,5 @@
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Paint;
 
@@ -11,7 +12,7 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
     private boolean pressingRight = false;
     private boolean firing = false;
     private int lives = 3;
-    private int fireDelay = 100;
+    private int fireDelay = 300;
     private long lastFiredTime = System.currentTimeMillis();
     
     @Override
@@ -45,7 +46,7 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
         if (pressingRight) move(getSpeed(), 0);
 
         if (firing && System.currentTimeMillis() - lastFiredTime > fireDelay) {
-            Game.getInstance().addChar(new Shot(getX() + 16, getY() - 32, -1, 0, 15));
+            Game.getInstance().addChar(new Shot(getX() + 16, getY() - 32, -1, 0, 15, this));
             AudioManager.getInstance().play(AssetsManager.getInstance().getSound("shoot1.mp3"));
             lastFiredTime = System.currentTimeMillis();
         }
@@ -70,6 +71,12 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
     
     @Override
     public void Draw(GraphicsContext graphicsContext) {
-        graphicsContext.drawImage(AssetsManager.getInstance().getImage("player.png"), getX(), getY(), getLargura(), getAltura());
+        Image im = AssetsManager.getInstance().getImage("player.png");
+        if (im == null) {
+            graphicsContext.setFill(Paint.valueOf("#00ff00"));
+            graphicsContext.fillRect(getX(), getY(), getLargura(), getAltura());
+        } else {
+            graphicsContext.drawImage(im, getX(), getY(), getLargura(), getAltura());
+        }
     }   
 }

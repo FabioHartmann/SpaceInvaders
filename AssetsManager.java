@@ -1,7 +1,6 @@
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,12 +21,8 @@ public class AssetsManager {
         images = new HashMap<>();
         sounds = new HashMap<>();
 
-        try {
-            loadAllImages();
-            loadAllSounds();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadAllImages();
+        loadAllSounds();
     }
 
     public Image getImage(String fileName) {
@@ -48,36 +43,55 @@ public class AssetsManager {
         return sounds.values().toArray(new Media[0]);
     }
 
-    private void loadAllSounds() throws IOException {
+    private void loadAllSounds() {
         Path[] paths = getPathsOf("./assets/sounds");
+        if (paths == null) return;
 
         for(Path p : paths) {
-            String fileName = p.getFileName().toString();
-            String path = p.subpath(1, p.getNameCount()).normalize().toString();
-
             try {
+                if (p == null || p.toUri() == null) continue;
+                String fileName = p.getFileName().toString();
+                String path = p.subpath(1, p.getNameCount()).normalize().toString();
+
                 Media media = new Media(p.toUri().toString());
 
                 sounds.put(fileName, media);
             }
             catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Failed load sound " + p.toUri().toString());
             }
         }
     }
 
-    private void loadAllImages() throws IOException {
+    private void loadAllImages() {
         Path[] paths = getPathsOf("./assets/images");
+        if (paths == null) return;
 
         for(Path p : paths) {
-            String fileName = p.getFileName().toString();
-            String path = p.subpath(1, p.getNameCount()).normalize().toString();
+            if (p == null || p.toUri() == null) continue;
+            try {
+                String fileName = p.getFileName().toString();
+                String path = p.subpath(1, p.getNameCount()).normalize().toString();
 
-            images.put(fileName, new Image(path));
+                Image image = new Image(path);
+                if (image.isError()) continue;
+
+                images.put(fileName, image);
+            }
+            catch (Exception exc) {
+                System.out.println("Failed load image " + p.toUri().toString());
+            }
         }
     }
 
-    private Path[] getPathsOf(String directoryName) throws IOException {
-        return Files.list(Paths.get(directoryName)).toArray(Path[]::new);
+    private Path[] getPathsOf(String directoryName) {
+        if (directoryName == null) return null;
+        try {
+            return Files.list(Paths.get(directoryName)).toArray(Path[]::new);
+        }
+            catch (Exception exc) {
+            System.out.println("Failed get paths of " + directoryName);
+        }
+        return null;
     }
 }
