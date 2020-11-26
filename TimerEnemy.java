@@ -33,9 +33,9 @@ public class TimerEnemy extends Enemy {
 
     @Override
     public void Draw(GraphicsContext graphicsContext){
-        Image im = AssetsManager.getInstance().getImage("spaceship.gif");
+        Image im = AssetsManager.getInstance().getImage("timerenemy.gif");
         if (im == null) {
-            graphicsContext.setFill(Paint.valueOf("#007700"));
+            graphicsContext.setFill(Paint.valueOf("#ff0000"));
             graphicsContext.fillRect(getX(), getY(), getLargura(), getAltura());
         } else {
             graphicsContext.drawImage(im, getX(), getY(), getLargura(), getAltura());

@@ -24,6 +24,7 @@ public class Main extends Application {
         Group root = new Group();
         Scene scene = new Scene( root );
         stage.setScene( scene );
+        scene.getStylesheets().add("styles.css");
 
         Canvas canvas = new Canvas(Params.GAME_WIDTH, Params.GAME_HEIGHT);
 

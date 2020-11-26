@@ -2,6 +2,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Paint;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
@@ -47,17 +48,30 @@ public class Game {
         if (died) return;
         UIManager.getInstance().update();
         eliminate(canhao);
-        died = true;
-        lastTimeDied = System.currentTimeMillis();
+        onDie();
     }
 
     public void onPlayerDamage() {
         if (died) return;
         UIManager.getInstance().update();
         if (canhao.getLives() == 0) {
-            died = true;
-            lastTimeDied = System.currentTimeMillis();
+            onDie();
         }
+    }
+
+    private void onDie() {
+        // Substituir pelos scores reais do player
+        UIManager.getInstance().setScores(Arrays.asList(new Score[]{
+                new Score(1),
+                new Score(2),
+                new Score(3),
+                new Score(4),
+                new Score(5),
+                new Score(8),
+                new Score(4444),
+        }));
+        died = true;
+        lastTimeDied = System.currentTimeMillis();
     }
 
     public void Start() {
@@ -117,7 +131,7 @@ public class Game {
     
     public void Update(long currentTime, long deltaTime) {
         if(died) {
-            if (System.currentTimeMillis() - lastTimeDied > 3000) {
+            if (System.currentTimeMillis() - lastTimeDied > 5000) {
                 resetGame();
                 UIManager.getInstance().setGameOverVisible(false);
             } else {
