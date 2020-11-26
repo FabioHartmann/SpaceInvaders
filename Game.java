@@ -43,7 +43,16 @@ public class Game {
         UIManager.getInstance().update();
     }
 
+    public void onEnemyReachEnd() {
+        if (died) return;
+        UIManager.getInstance().update();
+        eliminate(canhao);
+        died = true;
+        lastTimeDied = System.currentTimeMillis();
+    }
+
     public void onPlayerDamage() {
+        if (died) return;
         UIManager.getInstance().update();
         if (canhao.getLives() == 0) {
             died = true;
@@ -98,6 +107,9 @@ public class Game {
         }
         for(int i=0; i < 15; i++){
             addChar(new GroupEnemy(i * 40, 200));
+        }
+        for(int i=0; i < 2; i++){
+            addChar(new TimerEnemy(200 + i * 200, 300, 5 + (int)Math.floor(Math.random() * 5)));
         }
 
         UIManager.getInstance().update();

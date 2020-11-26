@@ -29,6 +29,9 @@ public abstract class Enemy extends BasicElement {
             Game.getInstance().onEnemyKilled();
             deactivate();
         }
+        if (getY() > Params.GAME_HEIGHT) {
+            Game.getInstance().onEnemyReachEnd();
+        }
     }
 
     @Override
