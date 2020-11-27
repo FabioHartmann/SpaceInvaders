@@ -19,19 +19,18 @@ public abstract class Enemy extends BasicElement {
     public void Update(){
         if (isColidindo()){
             Character colidindoChar = getColidindoChar();
-            // Se colidir com um enemy, ignora a colisao
-            if (colidindoChar instanceof Enemy) return;
-            // Se colidir com um shot de outro inimigo, ignora a colisao
-            if (colidindoChar instanceof Shot) {
-                Shot shot = (Shot)colidindoChar;
-                if (shot.getOwner() instanceof Enemy) return;
+
+            // Inimigo é destruido apenas por contato com canhao ou shot de um canhao
+            if ( colidindoChar instanceof Canhao ||
+                (colidindoChar instanceof Shot &&
+                ((Shot)colidindoChar).getOwner() instanceof Canhao)) {
+                AudioManager.getInstance().play(AssetsManager.getInstance().getSound("explosion1.mp3"));
+                deactivate();
+                Game.getInstance().onEnemyKilled(this);
             }
-            AudioManager.getInstance().play(AssetsManager.getInstance().getSound("explosion1.mp3"));
-            deactivate();
-            Game.getInstance().onEnemyKilled();
         }
         if (getY() + getAltura() > Params.GAME_HEIGHT) {
-            Game.getInstance().onEnemyReachEnd();
+            Game.getInstance().onEnemyReachEnd(this);
         }
     }
 

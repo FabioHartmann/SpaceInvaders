@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class Game {
     private static Game game = null;
     private Canhao canhao;
+    private ParticleSpawner particleSpawner;
     private List<Character> activeChars;
     private int score = 0;
     private boolean died = false;
@@ -46,15 +47,16 @@ public class Game {
         spawnWave();
     }
 
-    public void onEnemyKilled() {
+    public void onEnemyKilled(Enemy enemy) {
         score++;
         if (getChars(Enemy.class).size() == 0) {
             onAllWaveKilled();
         }
+        addChar(new FloatingPoint(enemy.getX(), enemy.getY(), 1));
         UIManager.getInstance().update();
     }
 
-    public void onEnemyReachEnd() {
+    public void onEnemyReachEnd(Enemy enemy) {
         if (died) return;
         eliminate(canhao);
         onDie();
@@ -96,6 +98,8 @@ public class Game {
 
         // Repositório de personagens
         activeChars = new LinkedList();
+
+        particleSpawner = new ParticleSpawner(200, 5);
 
         // Inicia o jogo
         resetGame();
@@ -153,14 +157,17 @@ public class Game {
             }
         }
 
+        particleSpawner.Update();
         for(int i=0;i<activeChars.size();i++) {
             Character este = activeChars.get(i);
             este.resetColidindo();
         }
         for(int i=0;i<activeChars.size();i++){
             Character este = activeChars.get(i);
+            if (!este.isColidivel()) continue;
             for(int j =0; j<activeChars.size();j++){
                 Character outro = activeChars.get(j);
+                if (!outro.isColidivel()) continue;
                 if ( este != outro){
                     este.testaColisao(outro);
                 }

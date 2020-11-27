@@ -13,6 +13,7 @@ public abstract class BasicElement implements Character{
     private int lminV,lmaxV;
     private int speed;
     private boolean active;
+    private boolean colidivel;
     private boolean colidiu;
     private Character colidindoChar;
     private boolean colidindo;
@@ -31,6 +32,9 @@ public abstract class BasicElement implements Character{
         direction_vertical = 0;
         active = true;
         colidiu = false;
+        colidindo = false;
+        colidindoChar = null;
+        colidivel = true;
         speed = 2;
         lminH = 0;
         lmaxH = Params.GAME_WIDTH;
@@ -168,6 +172,16 @@ public abstract class BasicElement implements Character{
     @Override
     public Character getColidindoChar() {
         return colidindoChar;
+    }
+
+    @Override
+    public boolean isColidivel() {
+        return colidivel;
+    }
+
+    @Override
+    public void setColidivel(boolean colidivel) {
+        this.colidivel = colidivel;
     }
 
     @Override

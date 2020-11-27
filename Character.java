@@ -14,6 +14,8 @@ public interface Character {
     
     void testaColisao(Character c);
     void resetColidindo();
+    void setColidivel(boolean colidivel);
+    boolean isColidivel();
     boolean isColidindo();
     Character getColidindoChar();
     boolean jaColidiu();
