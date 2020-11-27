@@ -18,6 +18,7 @@ public class Game {
     private int score = 0;
     private boolean died = false;
     private long lastTimeDied = 0;
+    private int wave = 0;
     
     private Game() {
 
@@ -39,16 +40,24 @@ public class Game {
         activeChars.remove(c);
     }
 
+    private void onAllWaveKilled() {
+        System.out.println("New wave " + wave);
+        spawnWave();
+    }
+
     public void onEnemyKilled() {
         score++;
+        if (getChars(Enemy.class).size() == 0) {
+            onAllWaveKilled();
+        }
         UIManager.getInstance().update();
     }
 
     public void onEnemyReachEnd() {
         if (died) return;
-        UIManager.getInstance().update();
         eliminate(canhao);
         onDie();
+        UIManager.getInstance().update();
     }
 
     public void onPlayerDamage() {
@@ -60,6 +69,8 @@ public class Game {
     }
 
     private void onDie() {
+        died = true;
+        lastTimeDied = System.currentTimeMillis();
         // Substituir pelos scores reais do player
         UIManager.getInstance().setScores(Arrays.asList(new Score[]{
                 new Score(1),
@@ -70,17 +81,18 @@ public class Game {
                 new Score(8),
                 new Score(4444),
         }));
-        died = true;
-        lastTimeDied = System.currentTimeMillis();
     }
 
     public void Start() {
+        // Inicializa o asset e audio manager
         AssetsManager.getInstance();
+        // Carrega todos sons na memoria
         AudioManager.getInstance().setupPlayersOfAll(AssetsManager.getInstance().getSounds(), 5);
 
         // Repositório de personagens
         activeChars = new LinkedList();
-        
+
+        // Inicia o jogo
         resetGame();
     }
 
@@ -100,9 +112,18 @@ public class Game {
         return canhao.getLives();
     }
 
+    private void spawnWave() {
+        List<Enemy> enemies = Waves.getWaveEnemies(wave);
+        for (Enemy enemy : enemies) {
+            addChar(enemy);
+        }
+        wave++;
+    }
+
     private void resetGame() {
         activeChars.clear();
         score = 0;
+        wave = 0;
 
         died = false;
 
@@ -110,21 +131,7 @@ public class Game {
         canhao = new Canhao();
         addChar(canhao);
 
-        for(int i=0; i<15; i++){
-            addChar(new Spaceship(i * 40, 40));
-        }
-        for(int i=0; i < 15; i++){
-            addChar(new GroupEnemy(i * 40, 120));
-        }
-        for(int i=0; i < 15; i++){
-            addChar(new GroupEnemy(i * 40, 160));
-        }
-        for(int i=0; i < 15; i++){
-            addChar(new GroupEnemy(i * 40, 200));
-        }
-        for(int i=0; i < 2; i++){
-            addChar(new TimerEnemy(200 + i * 200, 300, 5 + (int)Math.floor(Math.random() * 5)));
-        }
+        spawnWave();
 
         UIManager.getInstance().update();
     }

@@ -26,10 +26,11 @@ public abstract class Enemy extends BasicElement {
                 Shot shot = (Shot)colidindoChar;
                 if (shot.getOwner() instanceof Enemy) return;
             }
-            Game.getInstance().onEnemyKilled();
+            AudioManager.getInstance().play(AssetsManager.getInstance().getSound("explosion1.mp3"));
             deactivate();
+            Game.getInstance().onEnemyKilled();
         }
-        if (getY() > Params.GAME_HEIGHT) {
+        if (getY() + getAltura() > Params.GAME_HEIGHT) {
             Game.getInstance().onEnemyReachEnd();
         }
     }

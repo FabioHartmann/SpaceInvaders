@@ -40,13 +40,14 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
     public void Update() {
         if(isColidindo()) {
             setLives(lives-1);
+            AudioManager.getInstance().play(AssetsManager.getInstance().getSound("killed.mp3"));
             Game.getInstance().onPlayerDamage();
         }
         if (pressingLeft) move(-getSpeed(), 0);
         if (pressingRight) move(getSpeed(), 0);
 
         if (firing && System.currentTimeMillis() - lastFiredTime > fireDelay) {
-            Game.getInstance().addChar(new Shot(getX() + 16, getY() - 32, -1, 0, 15, this));
+            Game.getInstance().addChar(new Shot(getX() + 16, getY() - 16, -1, 0, 15, this));
             AudioManager.getInstance().play(AssetsManager.getInstance().getSound("shoot1.mp3"));
             lastFiredTime = System.currentTimeMillis();
         }

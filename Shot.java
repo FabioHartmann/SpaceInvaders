@@ -8,10 +8,13 @@ import javafx.scene.paint.Paint;
  */
 public class Shot extends BasicElement{
     private Character owner;
+    private long spawnTime;
+    private int autoDestroyDelay = 5;
 
     public Shot(int px,int py, int dirV, int dirH, int speed, Character owner){
         super(px,py);
 
+        spawnTime = System.currentTimeMillis();
         setDirV(dirV);
         setDirH(dirH);
         setSpeed(speed);
@@ -38,7 +41,8 @@ public class Shot extends BasicElement{
                 
     @Override
     public void Update(){
-        if (jaColidiu()){
+        // É necessario um auto destroy delay para garantir a performance
+        if (jaColidiu() || System.currentTimeMillis() - spawnTime > autoDestroyDelay * 1000){
             deactivate();
         }else{
             setPosY(getY() + getDirV() * getSpeed());
