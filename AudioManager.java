@@ -25,6 +25,23 @@ public class AudioManager {
         }
     }
 
+    public void setVolume(double volume) {
+        try {
+            for(Stack<MediaPlayer> mps : players.values()) {
+                for(MediaPlayer mp : mps) {
+                    try {
+                        mp.setVolume(volume);
+                    }
+                    catch (Exception exc) {
+                        System.out.println("Error on volume set mps " + exc.getMessage());
+                    }
+                }
+            }
+        } catch (Exception exc) {
+            System.out.println("Error on volume set " + exc.getMessage());
+        }
+    }
+
     public void setupPlayers(Media media, int count) {
         final Stack<MediaPlayer> mps;
         if (players.containsKey(media)) {

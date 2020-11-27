@@ -19,6 +19,7 @@ public class Game {
     private boolean died = false;
     private long lastTimeDied = 0;
     private int wave = 0;
+    private boolean paused = false;
     
     private Game() {
 
@@ -66,6 +67,10 @@ public class Game {
         if (canhao.getLives() == 0) {
             onDie();
         }
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 
     private void onDie() {
@@ -135,8 +140,9 @@ public class Game {
 
         UIManager.getInstance().update();
     }
-    
+
     public void Update(long currentTime, long deltaTime) {
+        if (paused) return;
         if(died) {
             if (System.currentTimeMillis() - lastTimeDied > 5000) {
                 resetGame();

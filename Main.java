@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
@@ -24,7 +25,12 @@ public class Main extends Application {
         Group root = new Group();
         Scene scene = new Scene( root );
         stage.setScene( scene );
-        scene.getStylesheets().add("styles.css");
+        try {
+            scene.getStylesheets().add("styles.css");
+        }
+        catch (Exception e) {
+            System.out.println("Nao foi possivel carregar o css " + e.getMessage());
+        }
 
         Canvas canvas = new Canvas(Params.GAME_WIDTH, Params.GAME_HEIGHT);
 
@@ -34,7 +40,7 @@ public class Main extends Application {
 
         // Setup Game object
         Game.getInstance().Start();
-        
+
         // Register User Input Handler
         scene.setOnKeyPressed((KeyEvent event) -> {
             Game.getInstance().OnInput(event.getCode(), true);
