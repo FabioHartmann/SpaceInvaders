@@ -1,6 +1,8 @@
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 
+import java.io.File;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,6 +16,9 @@ public class AssetsManager {
         return instance;
     }
 
+    private String assetsPath = "/assets";
+    private String imagesPath = "/images";
+    private String soundsPath = "/sounds";
     private HashMap<String, Image> images;
     private HashMap<String, Media> sounds;
 
@@ -44,43 +49,41 @@ public class AssetsManager {
     }
 
     private void loadAllSounds() {
-        Path[] paths = getPathsOf("./assets/sounds");
-        if (paths == null) return;
-
-        for(Path p : paths) {
-            try {
-                if (p == null || p.toUri() == null) continue;
-                String fileName = p.getFileName().toString();
-                String path = p.subpath(1, p.getNameCount()).normalize().toString();
-
-                Media media = new Media(p.toUri().toString());
-
-                sounds.put(fileName, media);
+        try {
+            URL url = getClass().getResource(assetsPath + soundsPath);
+            File dir = new File(url.getFile());
+            for (String filename : dir.list()) {
+                try {
+                    String externalURI = getClass().getResource(assetsPath + soundsPath + "/" + filename).toExternalForm();
+                    Media media = new Media(externalURI);
+                    sounds.put(filename, media);
+                }
+                catch (Exception exc) {
+                    System.out.println("Failed load sound " + filename + " " + exc.getMessage());
+                }
             }
-            catch (Exception e) {
-                System.out.println("Failed load sound " + p.toUri().toString());
-            }
+        }
+        catch (Exception exc) {
+            System.out.println("Error on load sounds assets " + exc.getMessage());
         }
     }
 
     private void loadAllImages() {
-        Path[] paths = getPathsOf("./assets/images");
-        if (paths == null) return;
-
-        for(Path p : paths) {
-            if (p == null || p.toUri() == null) continue;
-            try {
-                String fileName = p.getFileName().toString();
-                String path = p.subpath(1, p.getNameCount()).normalize().toString();
-
-                Image image = new Image(path);
-                if (image.isError()) continue;
-
-                images.put(fileName, image);
+        try {
+            URL url = getClass().getResource(assetsPath + imagesPath);
+            File dir = new File(url.getFile());
+            for (String filename : dir.list()) {
+                try {
+                    Image img = new Image(assetsPath + imagesPath + "/" + filename);
+                    images.put(filename, img);
+                }
+                catch (Exception exc) {
+                    System.out.println("Failed load image " + filename + " " + exc.getMessage());
+                }
             }
-            catch (Exception exc) {
-                System.out.println("Failed load image " + p.toUri().toString());
-            }
+        }
+        catch (Exception exc) {
+            System.out.println("Error on load images assets " + exc.getMessage());
         }
     }
 
