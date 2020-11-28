@@ -57,20 +57,20 @@ public class Main extends Application {
         new AnimationTimer()
         {
             long lastNanoTime = System.nanoTime();
-            
+
             @Override
             public void handle(long currentNanoTime)
             {
                 long deltaTime = currentNanoTime - lastNanoTime;
-                
+
                 Game.getInstance().Update(currentNanoTime, deltaTime);
                 gc.clearRect(0, 0, Params.GAME_WIDTH, Params.GAME_HEIGHT);
                 Game.getInstance().Draw(gc);
                 UIManager.getInstance().Update(currentNanoTime, deltaTime);
-                
+
                 lastNanoTime = currentNanoTime;
             }
-            
+
         }.start();
 
         // Show window

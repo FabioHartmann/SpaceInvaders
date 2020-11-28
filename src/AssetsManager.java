@@ -4,11 +4,15 @@ import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class AssetsManager {
     private static AssetsManager instance;
@@ -18,9 +22,9 @@ public class AssetsManager {
         return instance;
     }
 
-    private String assetsPath = "/assets";
-    private String imagesPath = "/images";
-    private String soundsPath = "/sounds";
+    private String assetsPath = "assets/";
+    private String imagesPath = "images/";
+    private String soundsPath = "sounds/";
     private HashMap<String, Image> images;
     private HashMap<String, Media> sounds;
 
@@ -52,16 +56,38 @@ public class AssetsManager {
 
     private void loadAllSounds() {
         try {
-            URL url = getClass().getResource(assetsPath + soundsPath);
-            File dir = new File(url.getFile());
-            for (String filename : dir.list()) {
-                try {
-                    String externalURI = getClass().getResource(assetsPath + soundsPath + "/" + filename).toExternalForm();
-                    Media media = new Media(externalURI);
-                    sounds.put(filename, media);
+            URL url = getClass().getResource("/" + assetsPath + soundsPath);
+
+            switch (url.getProtocol()) {
+                case "jar": {
+                    String assetSoundsPath = assetsPath + soundsPath;
+                    for(String path : getPathsInsideJar(url, assetSoundsPath)) {
+                        String filename = path.substring(assetSoundsPath.length());
+                        try {
+                            String externalURI = getClass().getResource("/" + path).toExternalForm();
+                            Media media = new Media(externalURI);
+                            sounds.put(filename, media);
+                        }
+                        catch (Exception exc) {
+                            System.out.println("Failed load sound " + filename + " " + exc.getMessage());
+                        }
+                    }
+                    JarURLConnection connection = (JarURLConnection) url.openConnection();
+                    JarFile file = connection.getJarFile();
+                    break;
                 }
-                catch (Exception exc) {
-                    System.out.println("Failed load sound " + filename + " " + exc.getMessage());
+                case "file": {
+                    File dir = new File(url.getFile());
+                    for (String filename : dir.list()) {
+                        try {
+                            String externalURI = getClass().getResource("/" + assetsPath + soundsPath + "/" + filename).toExternalForm();
+                            Media media = new Media(externalURI);
+                            sounds.put(filename, media);
+                        } catch (Exception exc) {
+                            System.out.println("Failed load sound " + filename + " " + exc.getMessage());
+                        }
+                    }
+                    break;
                 }
             }
         }
@@ -72,16 +98,34 @@ public class AssetsManager {
 
     private void loadAllImages() {
         try {
-            URL url = getClass().getResource(assetsPath + imagesPath);
-            File dir = new File(url.getFile());
-            for (String filename : dir.list()) {
-                try {
-                    Image img = new Image(assetsPath + imagesPath + "/" + filename);
-                    images.put(filename, img);
-                }
-                catch (Exception exc) {
-                    System.out.println("Failed load image " + filename + " " + exc.getMessage());
-                }
+            URL url = getClass().getResource("/" + assetsPath + imagesPath);
+
+            switch (url.getProtocol()) {
+                case "jar":
+                    String assetImagesPath = assetsPath + imagesPath;
+                    for(String path : getPathsInsideJar(url, assetImagesPath)) {
+                        String filename = path.substring(assetImagesPath.length());
+                        try {
+                            Image img = new Image(path);
+                            images.put(filename, img);
+                        }
+                        catch (Exception exc) {
+                            System.out.println("Failed load image " + filename + " " + exc.getMessage());
+                        }
+                    }
+                    break;
+                case "file":
+                    File dir = new File(url.getFile());
+                    for (String filename : dir.list()) {
+                        try {
+                            Image img = new Image(assetsPath + imagesPath + "/" + filename);
+                            images.put(filename, img);
+                        }
+                        catch (Exception exc) {
+                            System.out.println("Failed load image " + filename + " " + exc.getMessage());
+                        }
+                    }
+                    break;
             }
         }
         catch (Exception exc) {
@@ -89,14 +133,22 @@ public class AssetsManager {
         }
     }
 
-    private Path[] getPathsOf(String directoryName) {
-        if (directoryName == null) return null;
+    private List<String> getPathsInsideJar(URL jar, String path) {
+        List<String> paths = new LinkedList<>();
         try {
-            return Files.list(Paths.get(directoryName)).toArray(Path[]::new);
+            JarURLConnection connection = (JarURLConnection) jar.openConnection();
+            JarFile file = connection.getJarFile();
+            Enumeration<JarEntry> entries = file.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry e = entries.nextElement();
+                if (e.toString().startsWith(path)) {
+                    if (e.toString().equals(path)) continue;
+                    paths.add(e.toString());
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error on get paths inside jar file");
         }
-            catch (Exception exc) {
-            System.out.println("Failed get paths of " + directoryName);
-        }
-        return null;
+        return paths;
     }
 }

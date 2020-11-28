@@ -2,9 +2,11 @@ package src;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -27,7 +29,7 @@ public class UIManager {
 
     private StackPane gameStackPane;
     private BorderPane borderPane;
-    private BorderPane header;
+    private GridPane header;
     private BorderPane gameOverPane;
     private VBox configsPane;
     private Text scoreTxt;
@@ -37,9 +39,14 @@ public class UIManager {
     private Text configVolumeTxt;
     private Button configExit;
     private Text gameOverText;
+    private Text fpsText;
     private Button gameOverPlayAgainBtn;
     private Slider volumeSlider;
     private ObservableList<Score> scores;
+
+    private double bounceAnimAux = 0;
+    private int fpsAux = 0;
+    private long lastFpsTime = 0;
 
     private UIManager() {
         scores = FXCollections.observableList(new ArrayList<>());
@@ -49,7 +56,7 @@ public class UIManager {
 
         // Header UI (score & lifes)
 
-        header = new BorderPane();
+        header = new GridPane();
         header.setBackground(new Background(new BackgroundFill(Paint.valueOf("#121212"), null, null)));
         header.setPadding(new Insets(0, 30, 0, 30));
 
@@ -72,12 +79,20 @@ public class UIManager {
             Game.getInstance().setPaused(true);
         });
 
-        header.setLeft(lifesTxt);
-        BorderPane.setAlignment(header.getLeft(), Pos.CENTER);
-        header.setCenter(scoreTxt);
-        BorderPane.setAlignment(header.getCenter(), Pos.CENTER);
-        header.setRight(configBtn);
-        BorderPane.setAlignment(header.getRight(), Pos.CENTER);
+        fpsText = new Text("Fps: 0");
+        fpsText.setFill(Paint.valueOf("#00ff00"));
+        fpsText.setFont(Font.font(12));
+
+        header.addColumn(0, fpsText);
+        header.addColumn(1, lifesTxt);
+        header.addColumn(2, scoreTxt);
+        header.addColumn(3, configBtn);
+        header.getColumnConstraints().addAll(
+                new ColumnConstraints(50, 50, 50),
+                new ColumnConstraints(-1, -1, -1, Priority.ALWAYS, HPos.CENTER, true),
+                new ColumnConstraints(-1, -1, -1, Priority.ALWAYS, HPos.CENTER, true),
+                new ColumnConstraints(100, 100, 100)
+        );
         borderPane.setTop(header);
 
         // Game Over UI
@@ -166,11 +181,15 @@ public class UIManager {
         this.scores.setAll(scores);
     }
 
-    double bounceAnimAux = 0;
-
     public void Update(long currentNanoTime, long deltaTime) {
         scoreTxt.setText("Score: " + Game.getInstance().getScore());
         lifesTxt.setText("Lifes: " + Game.getInstance().getLifes());
+        fpsAux++;
+        if (currentNanoTime - lastFpsTime > 1000000000) {
+            lastFpsTime = currentNanoTime;
+            fpsText.setText("Fps: " + fpsAux);
+            fpsAux = 0;
+        }
         gameOverPlayAgainBtn.setScaleX(1d + Math.abs(Math.sin(bounceAnimAux)) / 5d);
         bounceAnimAux += 0.05;
         if (bounceAnimAux > 3.14) bounceAnimAux = 0;

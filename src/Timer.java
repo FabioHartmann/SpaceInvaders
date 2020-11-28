@@ -37,6 +37,7 @@ public class Timer {
         count += deltaTime / 1000000;
         if (count > interval) {
             count -= interval;
+            if (count > interval) count = 0;
             loops++;
             for(Consumer<Integer> handler : handlers) {
                 handler.accept(loops);
