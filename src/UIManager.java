@@ -114,7 +114,7 @@ public class UIManager {
         gameOverPane.setTop(gameOverText);
         gameOverPane.setCenter(tableView);
         gameOverPane.setBottom(gameOverPlayAgainBtn);
-        gameOverPane.setVisible(true);
+        gameOverPane.setVisible(false);
         gameOverPane.setBackground(null);
         BorderPane.setAlignment(gameOverPane.getTop(), Pos.CENTER);
         BorderPane.setAlignment(gameOverPane.getBottom(), Pos.CENTER);
