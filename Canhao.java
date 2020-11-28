@@ -37,7 +37,7 @@ public class Canhao extends BasicElement implements KeyboardCtrl{
     }
 
     @Override
-    public void Update() {
+    public void Update(long currentTime, long deltaTime) {
         if(isColidindo()) {
             setLives(lives-1);
             AudioManager.getInstance().play(AssetsManager.getInstance().getSound("killed.mp3"));

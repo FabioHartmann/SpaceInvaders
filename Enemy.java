@@ -2,9 +2,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
 public abstract class Enemy extends BasicElement {
-    private int fireDelay = 600;
-    private long lastFiredTime = System.currentTimeMillis();
-
     public Enemy(int px, int py) {
         setPosX(px);
         setPosY(py);
@@ -16,7 +13,7 @@ public abstract class Enemy extends BasicElement {
     }
 
     @Override
-    public void Update(){
+    public void Update(long currentTime, long deltaTime){
         if (isColidindo()){
             Character colidindoChar = getColidindoChar();
 

@@ -5,17 +5,24 @@ import javafx.scene.text.Font;
 public class FloatingPoint extends BasicElement {
 
     private int points;
-    private long spawnTime;
-    private long lastBlinkTime;
     private boolean isVisible;
+    private Timer blinkTimer;
+    private Timer autoDestroyTimer;
 
     public FloatingPoint(int px, int py, int points) {
         setPosX(px);
         setPosY(py);
         this.points = points;
-        spawnTime = System.currentTimeMillis();
-        lastBlinkTime = spawnTime;
         isVisible = true;
+        blinkTimer = new Timer(0.1f, true);
+        blinkTimer.addHandler(loop -> {
+            isVisible = !isVisible;
+        });
+
+        autoDestroyTimer = new Timer(0.5f, false);
+        autoDestroyTimer.addHandler(loop -> {
+            deactivate();
+        });
     }
 
     @Override
@@ -27,16 +34,11 @@ public class FloatingPoint extends BasicElement {
     }
 
     @Override
-    public void Update() {
+    public void Update(long currentTime, long deltaTime) {
         setPosX(getX() + getSpeed() * getDirH());
         setPosY(getY() + getSpeed() * getDirV());
-        if (System.currentTimeMillis() - spawnTime > 500) {
-            deactivate();
-        }
-        if (System.currentTimeMillis() - lastBlinkTime > 100) {
-            isVisible = !isVisible;
-            lastBlinkTime = System.currentTimeMillis();
-        }
+        autoDestroyTimer.Update(deltaTime);
+        blinkTimer.Update(deltaTime);
     }
 
     @Override

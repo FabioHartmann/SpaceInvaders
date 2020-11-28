@@ -4,30 +4,34 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 public class TimerEnemy extends Enemy {
-    private long spawnTime;
-    private int secondsAlive;
+    private int time;
+    private Timer timer;
 
     public TimerEnemy(int px, int py, int secondsAlive) {
         super(px, py);
-        spawnTime = System.currentTimeMillis();
-        this.secondsAlive = secondsAlive;
+        timer = new Timer(1f, true);
+        timer.addHandler(loop -> {
+            time--;
+            if (time == 0) {
+                deactivate();
+                for(int y=0; y < 3; y++){
+                    for(int x=0; x < 3; x++){
+                        Game.getInstance().addChar(new Spaceship(getX() + x * 35 - 30, getY() + y * 35 - 30));
+                    }
+                }
+            }
+        });
+        time = secondsAlive;
     }
 
     @Override
-    public void Update() {
-        super.Update();
+    public void Update(long currentTime, long deltaTime) {
+        super.Update(currentTime, deltaTime);
+        timer.Update(deltaTime);
         setPosX(getX() + getDirH() * getSpeed());
         if (getX() >= getLMaxH()){
             setPosX(getLMinH());
             setPosY(getY() + getAltura());
-        }
-        if (System.currentTimeMillis() - spawnTime > secondsAlive * 1000) {
-            deactivate();
-            for(int y=0; y < 3; y++){
-                for(int x=0; x < 3; x++){
-                    Game.getInstance().addChar(new Spaceship(getX() + x * 35 - 30, getY() + y * 35 - 30));
-                }
-            }
         }
     }
 
@@ -42,6 +46,6 @@ public class TimerEnemy extends Enemy {
         }
         graphicsContext.setFill(Paint.valueOf("#ff0000"));
         graphicsContext.setFont(Font.font(20));
-        graphicsContext.fillText((secondsAlive - (System.currentTimeMillis() - spawnTime) / 1000) + "s", getX(), getY());
+        graphicsContext.fillText(time + "s", getX(), getY());
     }
 }

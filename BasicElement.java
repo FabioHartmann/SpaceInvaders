@@ -203,7 +203,7 @@ public abstract class BasicElement implements Character{
     public abstract void start();    
         
     @Override
-    public abstract void Update();
+    public abstract void Update(long currentTime, long deltaTime);
         
     @Override
     public abstract void Draw(GraphicsContext graphicsContext);

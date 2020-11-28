@@ -23,6 +23,6 @@ public interface Character {
     
     void start();
     boolean isActive();
-    void Update();
+    void Update(long currentTime, long deltaTime);
     void Draw(GraphicsContext graphicsContext);
 }

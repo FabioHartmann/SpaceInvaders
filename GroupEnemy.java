@@ -17,8 +17,8 @@ public class GroupEnemy extends Enemy {
     }
 
     @Override
-    public void Update() {
-        super.Update();
+    public void Update(long currentTime, long deltaTime) {
+        super.Update(currentTime, deltaTime);
         List<GroupEnemy> ges = Game.getInstance().getChars(GroupEnemy.class);
         if (ges.size() > 0) {
             if (ges.get(0) == this) {

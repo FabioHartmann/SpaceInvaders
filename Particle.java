@@ -3,7 +3,7 @@ import javafx.scene.paint.Paint;
 
 public class Particle extends BasicElement {
 
-    private long spawnTime;
+    private Timer autoDestroyTimer;
 
     public Particle(int px, int py, int dirV, int dirH, int speed) {
         setPosX(px);
@@ -11,7 +11,10 @@ public class Particle extends BasicElement {
         setDirV(dirV);
         setDirH(dirH);
         setSpeed(speed);
-        spawnTime = System.currentTimeMillis();
+        autoDestroyTimer = new Timer(0.5f, false);
+        autoDestroyTimer.addHandler(loop -> {
+            deactivate();
+        });
     }
 
     @Override
@@ -21,12 +24,10 @@ public class Particle extends BasicElement {
     }
 
     @Override
-    public void Update() {
+    public void Update(long currentTime, long deltaTime) {
         setPosX(getX() + getSpeed() * getDirH());
         setPosY(getY() + getSpeed() * getDirV());
-        if (System.currentTimeMillis() - spawnTime > 500) {
-            deactivate();
-        }
+        autoDestroyTimer.Update(deltaTime);
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class Game {
     private static Game game = null;
     private Canhao canhao;
-    private ParticleSpawner particleSpawner;
+    private Timer particleSpawner;
     private List<Character> activeChars;
     private int score = 0;
     private boolean died = false;
@@ -99,7 +99,12 @@ public class Game {
         // Repositório de personagens
         activeChars = new LinkedList();
 
-        particleSpawner = new ParticleSpawner(200, 5);
+        particleSpawner = new Timer(0.2f, true);
+        particleSpawner.addHandler(loop -> {
+            for (int i = 0; i < 5; i++) {
+                addChar(new Particle((int)Math.floor(Math.random() * Params.GAME_WIDTH), (int)Math.floor(Math.random() * Params.GAME_HEIGHT), 0, 1, 5));
+            }
+        });
 
         // Inicia o jogo
         resetGame();
@@ -157,7 +162,7 @@ public class Game {
             }
         }
 
-        particleSpawner.Update();
+        particleSpawner.Update(deltaTime);
         for(int i=0;i<activeChars.size();i++) {
             Character este = activeChars.get(i);
             este.resetColidindo();
@@ -176,7 +181,7 @@ public class Game {
 
         for(int i=0;i<activeChars.size();i++){
             Character este = activeChars.get(i);
-            este.Update();
+            este.Update(currentTime, deltaTime);
         }
     }
     
