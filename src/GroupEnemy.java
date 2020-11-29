@@ -9,7 +9,7 @@ import java.util.List;
 
 public class GroupEnemy extends Enemy {
     public GroupEnemy(int px, int py) {
-        super(px, py);
+        super(px, py, 2);
     }
 
     @Override
@@ -52,5 +52,6 @@ public class GroupEnemy extends Enemy {
         } else {
             graphicsContext.drawImage(im, getX(), getY(), getLargura(), getAltura());
         }
+        DrawLifes(graphicsContext, 0, -5);
     }
 }

@@ -7,6 +7,7 @@ import javafx.scene.paint.Paint;
 import java.util.Arrays;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -50,11 +51,12 @@ public class Game {
     }
 
     public void onEnemyKilled(Enemy enemy) {
-        score++;
+        int pointsEarned = enemy.getMaxLifes() * 10;
+        score += pointsEarned;
         if (getChars(Enemy.class).size() == 0) {
             onAllWaveKilled();
         }
-        addChar(new FloatingPoint(enemy.getX(), enemy.getY(), 1));
+        addChar(new FloatingPoint(enemy.getX(), enemy.getY(), pointsEarned));
     }
 
     public void onEnemyReachEnd(Enemy enemy) {
@@ -99,7 +101,9 @@ public class Game {
         AudioManager.getInstance().setupPlayersOfAll(AssetsManager.getInstance().getSounds(), 5);
 
         // Repositório de personagens
-        activeChars = new LinkedList();
+        // Se utilizar LinkedList, dará problemas com o Update dos characters
+        // CopyOnWrite é necessario
+        activeChars = new CopyOnWriteArrayList<>();
 
         particleSpawner = new Timer(0.2f, true);
         particleSpawner.addHandler(loop -> {
@@ -180,10 +184,18 @@ public class Game {
             }
         }
 
-        for(int i=0;i<activeChars.size();i++){
-            Character este = activeChars.get(i);
+        // Quando algum Character era removido da lista,
+        // nao era realizado o Update do proximo
+        // (LinkedList -> CopyOnWriteArrayList)
+        // Nova implementacao:
+        for(Character este : activeChars) {
             este.Update(currentTime, deltaTime);
         }
+        // Implementacao antiga:
+        /*for(int i=0;i<activeChars.size();i++){
+            Character este = activeChars.get(i);
+            este.Update(currentTime, deltaTime);
+        }*/
     }
     
     public void OnInput(KeyCode keyCode, boolean isPressed) {

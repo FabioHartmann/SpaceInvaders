@@ -8,7 +8,7 @@ public class Spaceship extends Enemy {
     private Timer shotTimer;
 
     public Spaceship(int px, int py) {
-        super(px, py);
+        super(px, py, 3);
     }
 
     @Override
@@ -41,5 +41,6 @@ public class Spaceship extends Enemy {
         } else {
             graphicsContext.drawImage(im, getX(), getY(), getLargura(), getAltura());
         }
+        DrawLifes(graphicsContext, 0, -5);
     }
 }

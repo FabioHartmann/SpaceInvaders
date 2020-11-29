@@ -134,7 +134,7 @@ public final class Waves {
                         enemies.add(new GroupEnemy(x * cellX, y * cellY));
                         break;
                     case '2':
-                        enemies.add(new TimerEnemy(x * cellX, y * cellY, 5 + (int)Math.floor(Math.random() * 5)));
+                        enemies.add(new TimerEnemy(x * cellX, y * cellY, 15));
                         break;
                 }
             }

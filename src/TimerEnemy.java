@@ -10,15 +10,20 @@ public class TimerEnemy extends Enemy {
     private Timer timer;
 
     public TimerEnemy(int px, int py, int secondsAlive) {
-        super(px, py);
+        super(px, py, 4);
         timer = new Timer(1f, true);
         timer.addHandler(loop -> {
             time--;
             if (time == 0) {
                 deactivate();
+                int toSpawn = (int)Math.ceil((double)getLifes() / getMaxLifes() * 9);
+                int spawned = 0;
+                loop:
                 for(int y=0; y < 3; y++){
                     for(int x=0; x < 3; x++){
                         Game.getInstance().addChar(new Spaceship(getX() + x * 35 - 30, getY() + y * 35 - 30));
+                        spawned++;
+                        if (toSpawn == spawned) break loop;
                     }
                 }
             }
@@ -49,5 +54,7 @@ public class TimerEnemy extends Enemy {
         graphicsContext.setFill(Paint.valueOf("#ff0000"));
         graphicsContext.setFont(Font.font(20));
         graphicsContext.fillText(time + "s", getX(), getY());
+        graphicsContext.setFill(Paint.valueOf("#00ff00"));
+        DrawLifes(graphicsContext, 0, -20);
     }
 }
