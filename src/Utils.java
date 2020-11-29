@@ -1,6 +1,7 @@
 package src;
 
 import javafx.geometry.Rectangle2D;
+import src.elements.Character;
 
 import java.util.Collection;
 

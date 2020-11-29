@@ -1,7 +1,8 @@
-package src;
+package src.elements;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
+import src.Timer;
 
 /**
  * Represents a shot that crosses the screen from bottom to up and then dismiss

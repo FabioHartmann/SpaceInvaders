@@ -1,8 +1,10 @@
-package src;
+package src.elements.enemies;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
+import src.*;
+import src.elements.Shot;
 
 public class Spaceship extends Enemy {
     private Timer shotTimer;

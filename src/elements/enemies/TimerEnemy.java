@@ -1,9 +1,12 @@
-package src;
+package src.elements.enemies;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import src.AssetsManager;
+import src.Game;
+import src.Timer;
 
 public class TimerEnemy extends Enemy {
     private int time;

@@ -1,9 +1,13 @@
-package src;
+package src.elements.enemies;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
+import src.AssetsManager;
+import src.Game;
+import src.Params;
+import src.Utils;
 
 import java.util.List;
 

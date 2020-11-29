@@ -1,8 +1,9 @@
-package src;
+package src.elements;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import src.Timer;
 
 public class FloatingPoint extends BasicElement {
 

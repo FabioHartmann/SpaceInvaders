@@ -1,7 +1,12 @@
-package src;
+package src.elements.enemies;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
+import src.*;
+import src.elements.BasicElement;
+import src.elements.Canhao;
+import src.elements.Character;
+import src.elements.Shot;
 
 public abstract class Enemy extends BasicElement {
     private int lifes;

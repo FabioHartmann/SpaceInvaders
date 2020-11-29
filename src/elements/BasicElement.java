@@ -1,6 +1,8 @@
-package src;
+package src.elements;
 
 import javafx.scene.canvas.GraphicsContext;
+import src.Game;
+import src.Params;
 
 /**
  * Represents the basic game character

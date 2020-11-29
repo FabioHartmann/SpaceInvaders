@@ -1,15 +1,16 @@
-package src;
+package src.elements;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Paint;
+import src.*;
 
 /**
  * Represents the game Gun
  * @author Bernardo Copstein, Rafael Copstein
  */
-public class Canhao extends BasicElement implements KeyboardCtrl{
+public class Canhao extends BasicElement implements KeyboardCtrl {
     private boolean pressingLeft = false;
     private boolean pressingRight = false;
     private boolean firing = false;

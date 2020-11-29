@@ -1,5 +1,10 @@
 package src;
 
+import src.elements.enemies.Enemy;
+import src.elements.enemies.GroupEnemy;
+import src.elements.enemies.Spaceship;
+import src.elements.enemies.TimerEnemy;
+
 import java.util.LinkedList;
 import java.util.List;
 

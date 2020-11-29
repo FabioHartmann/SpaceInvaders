@@ -3,10 +3,15 @@ package src;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Paint;
+import src.elements.Canhao;
+import src.elements.Character;
+import src.elements.FloatingPoint;
+import src.elements.Particle;
+import src.elements.enemies.Enemy;
+import src.ui.UIManager;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 

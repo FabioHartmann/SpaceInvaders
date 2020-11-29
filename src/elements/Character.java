@@ -1,4 +1,4 @@
-package src;
+package src.elements;
 
 import javafx.scene.canvas.GraphicsContext;
 
