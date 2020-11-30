@@ -95,11 +95,11 @@ public abstract class BasicElement implements Character{
     public int getDirH(){
         return(direction_horizontal);
     }
-    
+
     public int getDirV(){
         return(direction_vertical);
     }
-    
+
     public int getLMinH(){
         return(lminH);
     }
@@ -205,7 +205,7 @@ public abstract class BasicElement implements Character{
     public abstract void start();    
         
     @Override
-    public abstract void Update(long currentTime, long deltaTime);
+    public abstract void Update(long currentTime, long deltaTime) throws Exception;
         
     @Override
     public abstract void Draw(GraphicsContext graphicsContext);

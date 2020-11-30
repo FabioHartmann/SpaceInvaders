@@ -10,6 +10,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import src.ui.UIManager;
 
+import java.io.IOException;
+
 /**
  * Handles window initialization and primary game setup
  * @author Bernardo Copstein, Rafael Copstein
@@ -64,7 +66,11 @@ public class Main extends Application {
             {
                 long deltaTime = currentNanoTime - lastNanoTime;
 
-                Game.getInstance().Update(currentNanoTime, deltaTime);
+                try {
+                    Game.getInstance().Update(currentNanoTime, deltaTime);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 gc.clearRect(0, 0, Params.GAME_WIDTH, Params.GAME_HEIGHT);
                 Game.getInstance().Draw(gc);
                 UIManager.getInstance().Update(currentNanoTime, deltaTime);

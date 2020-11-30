@@ -1,9 +1,6 @@
 package src;
 
-import src.elements.enemies.Enemy;
-import src.elements.enemies.GroupEnemy;
-import src.elements.enemies.Spaceship;
-import src.elements.enemies.TimerEnemy;
+import src.elements.enemies.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +14,7 @@ public final class Waves {
                     "                   ",
                     "                   ",
                     "        111        ",
-                    "                   ",
+                    "         3         ",
                     "     1       1     ",
                     "                   ",
                     "                   ",
@@ -133,7 +130,7 @@ public final class Waves {
             for (int x = 0; x < line.length(); x++) {
                 switch (line.charAt(x)) {
                     case '0':
-                        enemies.add(new Spaceship(x * cellX, y * cellY));
+                        enemies.add(new ShooterEnemy(x * cellX, y * cellY));
                         break;
                     case '1':
                         enemies.add(new GroupEnemy(x * cellX, y * cellY));
@@ -141,6 +138,8 @@ public final class Waves {
                     case '2':
                         enemies.add(new TimerEnemy(x * cellX, y * cellY, 15));
                         break;
+                    case '3':
+                        enemies.add(new RegenEnemy(x*cellX, y*cellY, 2));
                 }
             }
         }

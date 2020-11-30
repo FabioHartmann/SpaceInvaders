@@ -24,7 +24,7 @@ public class TimerEnemy extends Enemy {
                 loop:
                 for(int y=0; y < 3; y++){
                     for(int x=0; x < 3; x++){
-                        Game.getInstance().addChar(new Spaceship(getX() + x * 35 - 30, getY() + y * 35 - 30));
+                        Game.getInstance().addChar(new ShooterEnemy(getX() + x * 35 - 30, getY() + y * 35 - 30));
                         spawned++;
                         if (toSpawn == spawned) break loop;
                     }
@@ -35,7 +35,7 @@ public class TimerEnemy extends Enemy {
     }
 
     @Override
-    public void Update(long currentTime, long deltaTime) {
+    public void Update(long currentTime, long deltaTime) throws Exception {
         super.Update(currentTime, deltaTime);
         timer.Update(deltaTime);
         setPosX(getX() + getDirH() * getSpeed());
