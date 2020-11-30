@@ -11,6 +11,7 @@ import src.elements.enemies.Enemy;
 import src.ui.UIManager;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class Game {
     private Canhao canhao;
     private Timer particleSpawner;
     private List<Character> activeChars;
+    private List<Upgrade> upgrades;
     private int score = 0;
     private boolean died = false;
     private long lastTimeDied = 0;
@@ -110,6 +112,17 @@ public class Game {
         // CopyOnWrite é necessario
         activeChars = new CopyOnWriteArrayList<>();
 
+        upgrades = new LinkedList<>();
+        upgrades.add(new Upgrade("Upgrade de velocidade do canhao", 1, 500, (upgrade) -> {
+            if (canhao != null) {
+                canhao.setFireDelay(100);
+            }
+        }));
+        upgrades.add(new Upgrade("Comprar 1 vida", 3, 250, (upgrade) -> {
+            canhao.setLives(canhao.getLives() + 1);
+        }));
+        UIManager.getInstance().setUpgrades(upgrades);
+
         particleSpawner = new Timer(0.2f, true);
         particleSpawner.addHandler(loop -> {
             for (int i = 0; i < 5; i++) {
@@ -145,6 +158,10 @@ public class Game {
         wave++;
     }
 
+    private void resetUpgrades() {
+        for(Upgrade upgrade : upgrades) upgrade.reset();
+    }
+
     public void resetGame() {
         activeChars.clear();
         score = 0;
@@ -156,7 +173,13 @@ public class Game {
         canhao = new Canhao();
         addChar(canhao);
 
+        resetUpgrades();
+
         spawnWave();
+    }
+
+    public void removeScore(int score) {
+        this.score -= score;
     }
 
     public void Update(long currentTime, long deltaTime) {

@@ -39,6 +39,10 @@ public class Canhao extends BasicElement implements KeyboardCtrl {
         return lives;
     }
 
+    public void setFireDelay(int fireDelay) {
+        this.fireDelay = fireDelay;
+    }
+
     @Override
     public void Update(long currentTime, long deltaTime) {
         if(isColidindo()) {
@@ -82,5 +86,5 @@ public class Canhao extends BasicElement implements KeyboardCtrl {
         } else {
             graphicsContext.drawImage(im, getX(), getY(), getLargura(), getAltura());
         }
-    }   
+    }
 }
