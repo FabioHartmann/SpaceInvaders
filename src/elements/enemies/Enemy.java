@@ -35,6 +35,11 @@ public abstract class Enemy extends BasicElement {
     }
 
     @Override
+    public int getSpeed() {
+        return super.getSpeed() * Game.getInstance().getWave();
+    }
+
+    @Override
     public void Update(long currentTime, long deltaTime) throws Exception {
         if (isColidindo()){
             Character colidindoChar = getColidindoChar();

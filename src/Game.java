@@ -44,6 +44,8 @@ public class Game {
         }
         return(game);
     }
+
+    public int getWave() {return wave;};
     
     public void addChar(Character c){
         activeChars.add(c);
@@ -55,17 +57,18 @@ public class Game {
     }
 
     private void onAllWaveKilled() {
-        System.out.println("New wave " + wave);
         spawnWave();
     }
 
     public void onEnemyKilled(Enemy enemy) {
-        int pointsEarned = enemy.getMaxLifes() * 10;
-        score += pointsEarned;
-        if (getChars(Enemy.class).size() == 0) {
-            onAllWaveKilled();
+        if(!died){
+            int pointsEarned = enemy.getMaxLifes() * 10;
+            score += pointsEarned;
+            if (getChars(Enemy.class).size() == 0) {
+                onAllWaveKilled();
+            }
+            addChar(new FloatingPoint(enemy.getX(), enemy.getY(), pointsEarned));
         }
-        addChar(new FloatingPoint(enemy.getX(), enemy.getY(), pointsEarned));
     }
 
     public void onEnemyReachEnd(Enemy enemy) throws Exception {
@@ -93,7 +96,6 @@ public class Game {
         // Substituir pelos scores reais do player
         List<Score> scoreList = rank.getRanking().stream().map(it-> new Score(it)).collect(Collectors.toList());
 
-        scoreList.forEach(it-> System.out.println(it));
         UIManager.getInstance().setScores(scoreList);
 
         UIManager.getInstance().setGameOverVisible(true);
@@ -161,16 +163,6 @@ public class Game {
 
     public void Update(long currentTime, long deltaTime) throws Exception {
         if (paused) return;
-        /*if(died) {
-            // Timed play again
-            if (System.currentTimeMillis() - lastTimeDied > 5000) {
-                resetGame();
-                UIManager.getInstance().setGameOverVisible(false);
-            } else {
-                UIManager.getInstance().setGameOverVisible(true);
-                canhao.deactivate();
-            }
-        }*/
 
         particleSpawner.Update(deltaTime);
         for(int i=0;i<activeChars.size();i++) {

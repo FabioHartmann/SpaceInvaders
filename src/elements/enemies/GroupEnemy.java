@@ -45,6 +45,7 @@ public class GroupEnemy extends Enemy {
             }
         }
         setPosX(getX() + getSpeed() * getDirH());
+
     }
 
     @Override

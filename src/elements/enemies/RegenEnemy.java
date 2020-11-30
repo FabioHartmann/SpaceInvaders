@@ -23,14 +23,13 @@ public class RegenEnemy extends Enemy  {
     @Override
     public void Update(long currentTime, long deltaTime) throws Exception {
         super.Update(currentTime, deltaTime);
-        setPosX(getX() + getDirH() * getSpeed());
+        setPosX(getX() + getSpeed());
         shotTimer.Update(deltaTime);
         if (getX() >= getLMaxH()){
             setPosX(getLMinH());
             if(this.getLifes() < this.getMaxLifes()){
                 super.setLifes(this.getMaxLifes());
             }
-            setSpeed(Params.getInstance().nextInt(5)+1);
             setPosY(getY() + getAltura());
         }
     }
