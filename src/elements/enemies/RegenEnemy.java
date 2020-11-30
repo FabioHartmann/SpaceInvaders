@@ -4,6 +4,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import src.AssetsManager;
+import src.Game;
 import src.Params;
 import src.Timer;
 
@@ -18,6 +19,11 @@ public class RegenEnemy extends Enemy  {
     public void start() {
         shotTimer = new Timer(0.6f, true);
         super.start();
+    }
+
+    @Override
+    public int getSpeed() {
+        return (int)Math.ceil(super.getSpeed() / 4f);
     }
 
     @Override
