@@ -49,7 +49,7 @@ public class Shot extends BasicElement{
         if (jaColidiu()) {
             deactivate();
         }
-        setPosY(getY() + getDirV() * getSpeed());
+        setPosY((int)(getY() + getDirV() * getSpeed()));
         // Se chegou na parte superior da tela ...
         if (getY() <= getLMinV()){
             // Desaparece

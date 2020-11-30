@@ -23,6 +23,6 @@ public interface Character {
     
     void start();
     boolean isActive();
-    void Update(long currentTime, long deltaTime);
+    void Update(long currentTime, long deltaTime) throws Exception;
     void Draw(GraphicsContext graphicsContext);
 }

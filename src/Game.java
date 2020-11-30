@@ -10,7 +10,6 @@ import src.elements.Particle;
 import src.elements.enemies.Enemy;
 import src.ui.UIManager;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -31,6 +30,7 @@ public class Game {
     private long lastTimeDied = 0;
     private int wave = 0;
     private boolean paused = false;
+    private Rank rank = Rank.createRank();
     
     private Game() {
 
@@ -66,13 +66,13 @@ public class Game {
         addChar(new FloatingPoint(enemy.getX(), enemy.getY(), pointsEarned));
     }
 
-    public void onEnemyReachEnd(Enemy enemy) {
+    public void onEnemyReachEnd(Enemy enemy) throws Exception {
         if (died) return;
         eliminate(canhao);
         onDie();
     }
 
-    public void onPlayerDamage() {
+    public void onPlayerDamage() throws Exception {
         if (died) return;
         if (canhao.getLives() == 0) {
             onDie();
@@ -83,20 +83,16 @@ public class Game {
         this.paused = paused;
     }
 
-    private void onDie() {
+    private void onDie() throws Exception {
+        rank.changeRank(score);
         died = true;
         lastTimeDied = System.currentTimeMillis();
         canhao.deactivate();
         // Substituir pelos scores reais do player
-        UIManager.getInstance().setScores(Arrays.asList(new Score[]{
-                new Score(1),
-                new Score(2),
-                new Score(3),
-                new Score(4),
-                new Score(5),
-                new Score(8),
-                new Score(4444),
-        }));
+        List<Score> scoreList = rank.getRanking().stream().map(it-> new Score(it)).collect(Collectors.toList());
+
+        scoreList.forEach(it-> System.out.println(it));
+        UIManager.getInstance().setScores(scoreList);
 
         UIManager.getInstance().setGameOverVisible(true);
     }
@@ -182,7 +178,7 @@ public class Game {
         this.score -= score;
     }
 
-    public void Update(long currentTime, long deltaTime) {
+    public void Update(long currentTime, long deltaTime) throws Exception {
         if (paused) return;
         /*if(died) {
             // Timed play again
@@ -237,4 +233,5 @@ public class Game {
             c.Draw(graphicsContext);
         }
     }
+
 }

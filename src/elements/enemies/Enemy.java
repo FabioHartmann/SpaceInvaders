@@ -27,13 +27,15 @@ public abstract class Enemy extends BasicElement {
         return lifes;
     }
 
+    public void setLifes(int lifes) {this.lifes = lifes; };
+
     @Override
     public void start(){
         setDirH(1);
     }
 
     @Override
-    public void Update(long currentTime, long deltaTime){
+    public void Update(long currentTime, long deltaTime) throws Exception {
         if (isColidindo()){
             Character colidindoChar = getColidindoChar();
 

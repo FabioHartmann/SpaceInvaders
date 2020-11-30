@@ -6,10 +6,10 @@ import javafx.scene.paint.Paint;
 import src.*;
 import src.elements.Shot;
 
-public class Spaceship extends Enemy {
+public class ShooterEnemy extends Enemy {
     private Timer shotTimer;
 
-    public Spaceship(int px, int py) {
+    public ShooterEnemy(int px, int py) {
         super(px, py, 3);
     }
 
@@ -23,7 +23,7 @@ public class Spaceship extends Enemy {
     }
 
     @Override
-    public void Update(long currentTime, long deltaTime) {
+    public void Update(long currentTime, long deltaTime) throws Exception {
         super.Update(currentTime, deltaTime);
         setPosX(getX() + getDirH() * getSpeed());
         shotTimer.Update(deltaTime);
